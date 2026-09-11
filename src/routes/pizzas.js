@@ -6,15 +6,20 @@ const pizzaController = require('../controllers/pizzaController');
 const router = express.Router();
 
 /**
- * @openapi
+ * @swagger
  * /api/pizzas:
  *   get:
- *     summary: Retrieve a list of pizzas
+ *     tags:
+ *       - Pizzas
+ *     summary: Get all pizzas
  *     responses:
  *       200:
- *         ingredients: A list of pizzas
+ *         description: List of all pizzas
+ *
  *   post:
- *     summary: Create a new pizza
+ *     tags:
+ *       - Pizzas
+ *     summary: Create a pizza
  *     requestBody:
  *       required: true
  *       content:
@@ -27,23 +32,29 @@ const router = express.Router();
  *             properties:
  *               name:
  *                 type: string
+ *                 example: Margherita
  *               ingredients:
  *                 type: string
+ *                 example: Tomato, mozzarella, basil
  *               imageUrl:
  *                 type: string
+ *                 example: https://example.com/margherita.jpg
  *               price:
  *                 type: number
+ *                 example: 12.5
  *     responses:
  *       201:
- *         ingredients: Pizza created
+ *         description: Pizza created
  *       400:
- *         ingredients: Invalid input
+ *         description: Invalid data
  */
 
 /**
- * @openapi
+ * @swagger
  * /api/pizzas/{id}:
  *   get:
+ *     tags:
+ *       - Pizzas
  *     summary: Get a pizza by ID
  *     parameters:
  *       - in: path
@@ -53,41 +64,30 @@ const router = express.Router();
  *           type: integer
  *     responses:
  *       200:
- *         ingredients: A single pizza
+ *         description: Pizza found
  *       404:
- *         ingredients: Pizza not found
+ *         description: Pizza not found
+ *
  *   put:
- *     summary: Update a pizza by ID
+ *     tags:
+ *       - Pizzas
+ *     summary: Update a pizza
  *     parameters:
  *       - in: path
  *         name: id
  *         required: true
  *         schema:
  *           type: integer
- *     requestBody:
- *       required: true
- *       content:
- *         application/json:
- *           schema:
- *             type: object
- *             properties:
- *               name:
- *                 type: string
- *               ingredients:
- *                 type: string
- *               imageUrl:
- *                 type: string
- *               price:
- *                 type: number
  *     responses:
  *       200:
- *         ingredients: PIzza updated
- *       400:
- *         ingredients: Invalid input
+ *         description: Pizza updated
  *       404:
- *         ingredients: Pizza not found
+ *         description: Pizza not found
+ *
  *   delete:
- *     summary: Delete a pizza by ID
+ *     tags:
+ *       - Pizzas
+ *     summary: Delete a pizza
  *     parameters:
  *       - in: path
  *         name: id
@@ -96,13 +96,9 @@ const router = express.Router();
  *           type: integer
  *     responses:
  *       204:
- *         ingredients: Pizza deleted
+ *         description: Pizza deleted
  *       404:
- *         ingredients: Pizza not found
- */
-
-/**
- * Validation rules
+ *         description: Pizza not found
  */
 const createAndUpdateValidations = [
     body('name').isString().notEmpty().withMessage('name is required'),
