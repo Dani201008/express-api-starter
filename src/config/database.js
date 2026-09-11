@@ -10,28 +10,51 @@ const db = new sqlite3.Database(dbFile, (err) => {
         console.error('Could not connect to sqlite', err);
         process.exit(1);
     }
+
     console.log('Connected to sqlite database:', dbFile);
 });
 
-// Initialize products table if not exists
-const initSql = `
-CREATE TABLE IF NOT EXISTS products (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  name TEXT NOT NULL,
-  description TEXT,
-  imageUrl TEXT,
-  price REAL NOT NULL,
-  created_at TEXT DEFAULT (datetime('now')),
-  updated_at TEXT DEFAULT (datetime('now'))
-);
-`;
-
+// Création des tables
 db.serialize(() => {
-    db.run(initSql, (err) => {
+    db.run(`
+        CREATE TABLE IF NOT EXISTS pizzas (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        ingredients TEXT,
+        imageUrl TEXT,
+        price REAL NOT NULL,
+        created_at TEXT DEFAULT (datetime('now')),
+        updated_at TEXT DEFAULT (datetime('now'))
+    )
+`);
+
+    db.run(`
+        CREATE TABLE IF NOT EXISTS ingredients (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        name TEXT NOT NULL,
+        price REAL NOT NULL,
+        created_at TEXT DEFAULT (datetime('now')),
+        updated_at TEXT DEFAULT (datetime('now'))
+    )
+`);
+
+    db.run(`
+        CREATE TABLE IF NOT EXISTS pizzas_has_ingredients (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        pizza_id INTEGER,
+        ingredient_id INTEGER,
+        created_at TEXT DEFAULT (datetime('now')),
+        updated_at TEXT DEFAULT (datetime('now')),
+        FOREIGN KEY (pizza_id) REFERENCES pizzas(id) ON DELETE CASCADE,
+        FOREIGN KEY (ingredient_id) REFERENCES ingredients(id) ON DELETE CASCADE
+    )
+`, (err) => {
         if (err) {
             console.error('Failed to initialize database', err);
             process.exit(1);
         }
+
+        console.log('Database initialized');
     });
 });
 

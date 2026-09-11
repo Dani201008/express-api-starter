@@ -1,4 +1,4 @@
-// controllers/productController.js
+// controllers/pizzaController.js
 const { validationResult } = require('express-validator');
 const Pizza = require('../entities/Pizza');
 
