@@ -1,0 +1,32 @@
+@startuml
+title Modèle logique de données - Foodtruck
+
+entity "pizzas" as pizzas {
+    * id : INTEGER <<PK>>
+    --
+    name : TEXT
+    ingredients : TEXT
+    imageUrl : TEXT
+    price : REAL
+    created_at : TEXT
+    updated_at : TEXT
+}
+
+entity "ingredients" as ingredients {
+    * id : INTEGER <<PK>>
+    --
+    name : TEXT
+    price : REAL
+    created_at : TEXT
+    updated_at : TEXT
+}
+
+entity "pizzas_has_ingredients" as relation {
+    * pizza_id : INTEGER <<PK, FK>>
+    * ingredient_id : INTEGER <<PK, FK>>
+}
+
+pizzas ||--o{ relation : possède
+ingredients ||--o{ relation : est utilisé dans
+
+@enduml
